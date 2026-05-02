@@ -3,32 +3,37 @@ from src.ingestion.validator import validate_schema
 from src.cleaning.preprocessor import clean_data
 from src.analysis.kpi_engine import generate_kpis
 from src.visualization.charts import plot_revenue_trend
+from src.ai_engine.insight_generator import generate_ai_insights
 
 
 def main():
 
     file_path = "data/raw/sales_sample.csv"
 
-    # Step 1: Load data
+    # Load
     df = load_file(file_path)
 
-    # Step 2: Validate schema
+    # Validate
     validate_schema(df)
 
-    # Step 3: Clean data
+    # Clean
     df = clean_data(df)
 
-    # Step 4: Generate KPIs
+    # Generate KPIs
     kpis = generate_kpis(df)
 
-    # Step 5: Print results
-    print("\nCLEANED DATA:")
-    print(df)
-
-    print("\nBUSINESS KPIs:")
+    print("\nKPIs:\n")
     print(kpis)
 
+    # Visualization
     plot_revenue_trend(df)
+
+    # AI Insights
+    insights = generate_ai_insights(kpis)
+
+    print("\nAI INSIGHTS:\n")
+    print(insights)
+
 
 if __name__ == "__main__":
     main()
