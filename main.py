@@ -1,12 +1,14 @@
 from src.ingestion.loader import load_file
 from src.ingestion.validator import validate_schema
 from src.cleaning.preprocessor import clean_data
+from src.analysis.kpi_engine import generate_kpis
 
 
 def main():
+
     file_path = "data/raw/sales_sample.csv"
 
-    # Step 1: Load file
+    # Step 1: Load data
     df = load_file(file_path)
 
     # Step 2: Validate schema
@@ -15,8 +17,15 @@ def main():
     # Step 3: Clean data
     df = clean_data(df)
 
-    # Step 4: Print cleaned data
+    # Step 4: Generate KPIs
+    kpis = generate_kpis(df)
+
+    # Step 5: Print results
+    print("\nCLEANED DATA:")
     print(df)
+
+    print("\nBUSINESS KPIs:")
+    print(kpis)
 
 
 if __name__ == "__main__":
