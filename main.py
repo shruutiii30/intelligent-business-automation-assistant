@@ -2,6 +2,7 @@ from src.ingestion.loader import load_file
 from src.ingestion.validator import validate_schema
 from src.cleaning.preprocessor import clean_data
 from src.analysis.kpi_engine import generate_kpis
+from src.visualization.charts import plot_revenue_trend
 
 
 def main():
@@ -27,6 +28,7 @@ def main():
     print("\nBUSINESS KPIs:")
     print(kpis)
 
+    plot_revenue_trend(df)
 
 if __name__ == "__main__":
     main()
