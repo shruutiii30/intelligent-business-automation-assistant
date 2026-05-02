@@ -15,6 +15,7 @@ from src.cleaning.preprocessor import clean_data
 from src.analysis.kpi_engine import generate_kpis
 from src.ai_engine.insight_generator import generate_ai_insights
 
+from src.reporting.exporter import export_report
 
 st.title("Intelligent Business Automation Assistant")
 
@@ -51,3 +52,10 @@ if uploaded_file:
     # Data Preview
     st.subheader("Processed Data")
     st.dataframe(df)
+
+    # Export Report
+    report_path = export_report(df)
+
+    st.success(
+    f"Report generated successfully: {report_path}"
+    )
