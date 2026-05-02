@@ -1,10 +1,10 @@
 import os
 from dotenv import load_dotenv
-from openai import OpenAI
+from google import genai
 
 load_dotenv()
 
-client = OpenAI(
+client = genai.Client(
     api_key=os.getenv("OPENAI_API_KEY")
 )
 
@@ -12,24 +12,19 @@ client = OpenAI(
 def generate_ai_insights(kpis):
 
     prompt = f"""
-    Analyze these business KPIs and give executive insights:
+    Analyze these business KPIs and provide:
 
-    {kpis}
-
-    Include:
-    1. Business performance
+    1. Business performance summary
     2. Risks
     3. Recommendations
+
+    KPI Data:
+    {kpis}
     """
 
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
+    response = client.models.generate_content(
+        model="gemini-2.0-flash",
+        contents=prompt
     )
 
-    return response.choices[0].message.content
+    return response.text
