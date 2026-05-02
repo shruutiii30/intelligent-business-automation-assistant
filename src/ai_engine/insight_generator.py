@@ -1,30 +1,27 @@
-import os
-from dotenv import load_dotenv
-from google import genai
-
-load_dotenv()
-
-client = genai.Client(
-    api_key=os.getenv("OPENAI_API_KEY")
-)
-
-
 def generate_ai_insights(kpis):
 
-    prompt = f"""
-    Analyze these business KPIs and provide:
+    total_revenue = kpis["total_revenue"]
+    top_product = kpis["top_product"]
+    avg_order_value = kpis["avg_order_value"]
 
-    1. Business performance summary
-    2. Risks
-    3. Recommendations
+    return f"""
+    BUSINESS PERFORMANCE SUMMARY
 
-    KPI Data:
-    {kpis}
+    Total Revenue Generated: ₹{total_revenue}
+
+    Top Performing Product: {top_product}
+
+    Average Order Value: ₹{avg_order_value:.2f}
+
+    KEY INSIGHTS:
+
+    1. Revenue generation is stable based on current transactions.
+
+    2. {top_product} is driving the highest business value.
+
+    3. Consider increasing inventory allocation for high-performing products.
+
+    4. Monitor underperforming product categories for optimization.
+
+    5. Track revenue trends continuously for growth forecasting.
     """
-
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        contents=prompt
-    )
-
-    return response.text

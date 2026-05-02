@@ -1,14 +1,22 @@
 import pandas as pd
 
-def load_file(file_path):
+
+def load_file(file):
     try:
-        file_path = file_path.lower()
 
-        if file_path.endswith(".csv"):
-            return pd.read_csv(file_path)
+        # Streamlit uploaded file object
+        if hasattr(file, "name"):
+            filename = file.name.lower()
 
-        elif file_path.endswith(".xlsx"):
-            return pd.read_excel(file_path)
+        # Local file path string
+        else:
+            filename = file.lower()
+
+        if filename.endswith(".csv"):
+            return pd.read_csv(file)
+
+        elif filename.endswith(".xlsx"):
+            return pd.read_excel(file)
 
         else:
             raise ValueError("Unsupported file format")
