@@ -18,3 +18,9 @@ Thumbs.db
 
 # Test cache
 .pytest_cache/
+
+# Generated reports
+data/processed/
+
+# Uploaded raw files
+data/raw/
