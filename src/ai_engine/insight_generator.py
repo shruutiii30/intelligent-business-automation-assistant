@@ -1,27 +1,30 @@
 def generate_ai_insights(kpis):
 
-    total_revenue = kpis["total_revenue"]
-    top_product = kpis["top_product"]
-    avg_order_value = kpis["avg_order_value"]
+    metric_name = kpis["main_metric"]
+    total_value = kpis["total_value"]
+    avg_value = kpis["avg_value"]
+    top_category = kpis["top_category"]
 
     return f"""
     BUSINESS PERFORMANCE SUMMARY
 
-    Total Revenue Generated: ₹{total_revenue}
+    Primary Metric: {metric_name}
 
-    Top Performing Product: {top_product}
+    Total Value: {round(total_value, 2)}
 
-    Average Order Value: ₹{avg_order_value:.2f}
+    Average Value: {round(avg_value, 2)}
+
+    Top Category: {top_category}
 
     KEY INSIGHTS:
 
-    1. Revenue generation is stable based on current transactions.
+    1. The dataset shows strong activity in {top_category}.
 
-    2. {top_product} is driving the highest business value.
+    2. Total {metric_name} generated is {round(total_value, 2)}.
 
-    3. Consider increasing inventory allocation for high-performing products.
+    3. Average {metric_name} per record is {round(avg_value, 2)}.
 
-    4. Monitor underperforming product categories for optimization.
+    4. Focus on high-performing categories to maximize growth.
 
-    5. Track revenue trends continuously for growth forecasting.
+    5. Monitor low-performing segments for optimization.
     """

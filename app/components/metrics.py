@@ -6,22 +6,21 @@ def show_metrics(kpis):
     col1, col2, col3, col4 = st.columns(4)
 
     col1.metric(
-        "Revenue",
-        f"₹{kpis['total_revenue']}"
+        "Total Value",
+        round(kpis["total_value"], 2)
     )
 
     col2.metric(
-        "Orders",
-        kpis['total_orders']
+        "Average",
+        round(kpis["avg_value"], 2)
     )
 
     col3.metric(
-        "Top Product",
-        kpis['top_product']
+        "Records",
+        kpis["total_records"]
     )
 
     col4.metric(
-        "Avg Order",
-        f"₹{round(kpis['avg_order_value'],2)}"
+        "Top Category",
+        kpis["top_category"]
     )
-    

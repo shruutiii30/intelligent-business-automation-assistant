@@ -14,8 +14,10 @@ import streamlit as st
 
 from components.sidebar import render_sidebar
 from components.metrics import show_metrics
-from components.charts import show_revenue_chart
 from components.insights import show_ai_insights
+from components.product_chart import show_product_comparison
+from components.charts import show_dynamic_chart
+from src.analysis.schema_detector import detect_schema
 
 from src.ingestion.loader import load_file
 from src.ingestion.validator import validate_schema
@@ -49,10 +51,14 @@ st.markdown("""
     padding-top: 2rem;
 }
 
+[data-testid="stSidebar"] {
+    background-color: #f8fafc;
+}
+
 [data-testid="metric-container"] {
     background-color: white;
-    border-radius: 12px;
-    padding: 20px;
+    border-radius: 14px;
+    padding: 18px;
     box-shadow: 0px 2px 8px rgba(0,0,0,0.08);
 }
 
@@ -103,8 +109,27 @@ if uploaded_file:
             # Clean
             df = clean_data(df)
 
+            # Product Filter
+            if "Product" in df.columns:
+
+                selected_product = st.sidebar.selectbox(
+                    "🛍 Filter Product",
+                    ["All"] + list(df["Product"].unique())
+                )
+
+                if selected_product != "All":
+
+                    df = df[
+                        df["Product"] == selected_product
+                    ]
+
             # KPIs
-            kpis = generate_kpis(df)
+            schema = detect_schema(df)
+
+            kpis = generate_kpis(
+                df,
+                schema
+            )
 
             # AI Insights
             insights = generate_ai_insights(kpis)
@@ -113,32 +138,50 @@ if uploaded_file:
             report_path = export_report(df)
 
         # ============================
-        # DASHBOARD SECTION
+        # TABS
         # ============================
-        st.markdown("---")
-        st.subheader("📈 Business Dashboard")
-
-        show_metrics(kpis)
-
-        st.markdown("### Revenue Trend")
-        show_revenue_chart(df)
-
-        # ============================
-        # DATA PREVIEW
-        # ============================
-        st.markdown("---")
-        st.subheader("📄 Processed Data Preview")
-
-        st.dataframe(
-            df,
-            use_container_width=True
+        tab1, tab2, tab3 = st.tabs(
+            [
+                "📈 Dashboard",
+                "📄 Data",
+                "🤖 AI Insights"
+            ]
         )
 
         # ============================
-        # AI INSIGHTS
+        # DASHBOARD TAB
         # ============================
-        st.markdown("---")
-        show_ai_insights(insights)
+        with tab1:
+
+            show_metrics(kpis)
+
+            st.markdown("### Revenue Trend")
+            show_dynamic_chart(
+                df,
+                schema
+            )
+
+            if "Product" in df.columns:
+
+                st.markdown("### Product Performance")
+                show_product_comparison(df)
+
+        # ============================
+        # DATA TAB
+        # ============================
+        with tab2:
+
+            st.dataframe(
+                df,
+                use_container_width=True
+            )
+
+        # ============================
+        # AI INSIGHTS TAB
+        # ============================
+        with tab3:
+
+            show_ai_insights(insights)
 
         # ============================
         # DOWNLOAD SECTION

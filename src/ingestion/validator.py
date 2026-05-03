@@ -1,16 +1,20 @@
 import pandas as pd
 
-REQUIRED_COLUMNS = ["Date", "Product", "Revenue"]
 
-def validate_schema(df: pd.DataFrame):
-    missing_columns = [
-        col for col in REQUIRED_COLUMNS
-        if col not in df.columns
-    ]
+def validate_schema(
+    df: pd.DataFrame
+):
 
-    if missing_columns:
+    if df.empty:
+
         raise ValueError(
-            f"Missing required columns: {missing_columns}"
+            "Uploaded file is empty."
+        )
+
+    if len(df.columns) < 2:
+
+        raise ValueError(
+            "Dataset must contain at least 2 columns."
         )
 
     return True
